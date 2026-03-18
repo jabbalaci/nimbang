@@ -1,0 +1,6 @@
+nimbang
+*.exe
+nimble.develop
+nimble.paths
+nimbledeps
+config.nims

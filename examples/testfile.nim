@@ -1,4 +1,4 @@
-#!/usr/bin/env nimcr
+#!/usr/bin/env nimbang
 echo "Hello World!"
 
 import os
