@@ -77,6 +77,6 @@ if buildStatus == 0:
   p.close()
   quit(res)
 else:
-  stderr.write "(nimbang) Error on build running command: " & command
+  stderr.write "(nimbang) Error on build running command: " & command & "\n"
   stderr.write output
   quit(buildStatus)
