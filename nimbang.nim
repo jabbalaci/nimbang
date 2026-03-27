@@ -3,7 +3,9 @@ import os
 import osproc
 import strutils
 
-const nimArgsPrefix = "#nimbang-args "
+const
+  nimArgsPrefix = "#nimbang-args "
+  nimbangSettingsPrefix = "#nimbang-settings "
 
 # Inspect command line parameters
 let args =  commandLineParams()
@@ -13,6 +15,7 @@ if args.len == 0:
   stderr.write "Usage in a script:\n"
   stderr.write "    [1] add `#!/usr/bin/env nimbang` to your script as first line\n"
   stderr.write "    [2] (optional) add `#nimbang-args [arguments for nim compiler]` to your script as second line\n"
+  stderr.write "    [3] (optional) add `#nimbang-settings [settings for nimbang]` to your script as third line\n"
   quit(-1)
 
 let
@@ -48,7 +51,10 @@ var
   command = ""
 
 if not exeName.fileExists or filename.fileNewer(exeName):
-  var nimArgs = "c"  # default: debug build
+  var
+    nimArgs = "c"  # default: debug build
+    nimbangSettings: seq[string] = @[]  # supported settings: nodebug
+    showDebug = true
   # Get extra arguments for nim compiler from the second line (it must start with #nimbang-args [args] )
   block:
     for line in filename.lines:
@@ -56,13 +62,18 @@ if not exeName.fileExists or filename.fileNewer(exeName):
         break
       if line.startsWith(nimArgsPrefix):
         nimArgs = line[nimArgsPrefix.len .. ^1]
+      if line.startsWith(nimbangSettingsPrefix):
+        nimbangSettings = line[nimbangSettingsPrefix.len .. ^1].strip.split
+        if "nodebug" in nimbangSettings: showDebug = false
         break
 
   exeName.removeFile
   command = "nim " & nimArgs & " --colors:on --nimcache:" &
     nimCacheDir &
     " --out:\"" & exeName & "\" \"" & filename & "\""  # dxbb's patch
-  stderr.write "# " & command & "\n"
+  if showDebug:
+    stderr.write "# " & command & "\n"
+    stderr.write "# ---\n"
 
   (output, buildStatus) = execCmdEx(command)
   # Windows file hiding (hopefully, not tested)
