@@ -156,14 +156,14 @@ I had a question about it in the forum too ([link](https://forum.nim-lang.org/t/
 ## How to switch off the debug info
 
 By default, `nimbang` shows some debug info when the source
-code is compiled. In version 0.4.3, I added the possibility to switch it off. For this, you need to
+code is compiled. In version 0.4.4, I added the possibility to switch it off. For this, you need to
 add a third line at the top of the source code:
 
 ```
 $ cat hello.nim
 #!/usr/bin/env nimbang
 #off:nimbang-args c -d:release
-#nimbang-settings nodebug
+#nimbang-settings hideDebugInfo
 
 echo "hello nimbang"
 
@@ -179,7 +179,7 @@ Thus, I suggest using the following template:
 $ cat hello.nim
 #!/usr/bin/env nimbang
 #off:nimbang-args c -d:release
-#off:nimbang-settings nodebug
+#off:nimbang-settings hideDebugInfo
 
 echo "hello nimbang"
 ```
@@ -189,4 +189,6 @@ just remove the substring "off:" from the third line.
 
 The third line with "nimbang-settings" is reserved
 for settings that modify the behaviour of nimbang.
-Currently, only the "nodebug" setting is supported.
+Currently, only the "hideDebugInfo" setting is supported.
+Nimbang settings are case-insensitive, thus you
+could also write "hidedebuginfo".

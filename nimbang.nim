@@ -53,8 +53,8 @@ var
 if not exeName.fileExists or filename.fileNewer(exeName):
   var
     nimArgs = "c"  # default: debug build
-    nimbangSettings: seq[string] = @[]  # supported settings: nodebug
-    showDebug = true
+    nimbangSettings: seq[string] = @[]  # supported settings: hidedebuginfo
+    showDebugInfo = true
   # Get extra arguments for nim compiler from the second line (it must start with #nimbang-args [args] )
   block:
     for line in filename.lines:
@@ -63,15 +63,15 @@ if not exeName.fileExists or filename.fileNewer(exeName):
       if line.startsWith(nimArgsPrefix):
         nimArgs = line[nimArgsPrefix.len .. ^1]
       if line.startsWith(nimbangSettingsPrefix):
-        nimbangSettings = line[nimbangSettingsPrefix.len .. ^1].strip.split
-        if "nodebug" in nimbangSettings: showDebug = false
+        nimbangSettings = line[nimbangSettingsPrefix.len .. ^1].strip.toLower.split
+        if "hidedebuginfo" in nimbangSettings: showDebugInfo = false
         break
 
   exeName.removeFile
   command = "nim " & nimArgs & " --colors:on --nimcache:" &
     nimCacheDir &
     " --out:\"" & exeName & "\" \"" & filename & "\""  # dxbb's patch
-  if showDebug:
+  if showDebugInfo:
     stderr.write "# " & command & "\n"
     stderr.write "# ---\n"
 
