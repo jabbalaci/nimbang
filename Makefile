@@ -11,3 +11,6 @@ rel:
 
 small:
 	nim c -d:release --opt:size --passL:-s ${fname}
+
+install:
+	nimble install

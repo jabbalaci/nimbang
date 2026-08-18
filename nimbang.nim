@@ -1,21 +1,27 @@
 import hashes
 import os
 import osproc
+import strformat
 import strutils
+
+const
+  VERSION = "0.4.5"
+  URL = "https://github.com/jabbalaci/nimbang"
 
 const
   nimArgsPrefix = "#nimbang-args "
   nimbangSettingsPrefix = "#nimbang-settings "
 
 # Inspect command line parameters
-let args =  commandLineParams()
+let args = commandLineParams()
 
 if args.len == 0:
-  stderr.write "Usage on the command line: nimbang filename [arguments to program]\n"
-  stderr.write "Usage in a script:\n"
-  stderr.write "    [1] add `#!/usr/bin/env nimbang` to your script as first line\n"
-  stderr.write "    [2] (optional) add `#nimbang-args [arguments for nim compiler]` to your script as second line\n"
-  stderr.write "    [3] (optional) add `#nimbang-settings [settings for nimbang]` to your script as third line\n"
+  stderr.writeLine &"nimbang v{VERSION}"
+  stderr.writeLine "Usage on the command line: nimbang filename [arguments to program]"
+  stderr.writeLine "Usage in a script:"
+  stderr.writeLine "    [1] add `#!/usr/bin/env nimbang` to your script as first line"
+  stderr.writeLine "    [2] (optional) add `#nimbang-args [arguments for nim compiler]` to your script as second line"
+  stderr.writeLine "    [3] (optional) add `#nimbang-settings [settings for nimbang]` to your script as third line"
   quit(-1)
 
 let
